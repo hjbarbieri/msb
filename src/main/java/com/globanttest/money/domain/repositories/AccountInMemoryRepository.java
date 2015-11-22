@@ -1,4 +1,4 @@
-package com.globanttest.domain.repositories;
+package com.globanttest.money.domain.repositories;
 
 
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.globanttest.domain.events.AccountEvent;
+import com.globanttest.money.domain.events.AccountEvent;
 
 @Repository
 public class AccountInMemoryRepository implements AccountEventRepository {

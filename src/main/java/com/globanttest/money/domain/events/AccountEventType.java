@@ -1,4 +1,4 @@
-package com.globanttest.domain.events;
+package com.globanttest.money.domain.events;
 
 public enum AccountEventType {
 

@@ -2,20 +2,45 @@ package com.globanttest.money.domain;
 
 import java.math.BigDecimal;
 
-import com.globanttest.domain.events.AccountEvent;
-import com.globanttest.domain.events.AccountEventType;
-import com.globanttest.interfaces.rest.OpenAccountCommand;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import com.globanttest.money.domain.events.AccountEvent;
+import com.globanttest.money.domain.events.AccountEventType;
+import com.globanttest.money.domain.repositories.AccountEventRepository;
+import com.globanttest.money.interfaces.rest.MoneyTransferCommand;
+
+@Component
 public class MoneyTransfer {
 
+	@Autowired
+	private AccountEventRepository accountEventRepository;
+	
 	private Long fromAccount;
 	private Long toAccount;
 	private BigDecimal amount;
 	
-	public void processMoneyTransfer(OpenAccountCommand accountOpenCommand) {
-		AccountEvent accountOpenEvent = new AccountEvent(accountOpenCommand.getInitialBalance(),12L,AccountEventType.OPEN);
+	public void processMoneyTransfer(MoneyTransferCommand moneyTransferCommand) {
 		
-		accountEventRepository.persist(accountOpenEvent);
+		AccountEvent moneyFromAccountTransferEvent = new AccountEvent(moneyTransferCommand.getAmount(),moneyTransferCommand.getFromAccount(),AccountEventType.DEBIT);
+		AccountEvent moneyToAccountTransferEvent = new AccountEvent(moneyTransferCommand.getAmount(),moneyTransferCommand.getToAccount(),AccountEventType.CREDIT);
+		
+		accountEventRepository.persist(moneyFromAccountTransferEvent);
+		accountEventRepository.persist(moneyToAccountTransferEvent);
 		
 	}
+
+	public Long getFromAccount() {
+		return fromAccount;
+	}
+
+	public Long getToAccount() {
+		return toAccount;
+	}
+
+	public BigDecimal getAmount() {
+		return amount;
+	}
+	
+	
 }
