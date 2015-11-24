@@ -5,8 +5,8 @@ import java.math.BigDecimal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.globanttest.money.domain.events.AccountEvent;
-import com.globanttest.money.domain.events.AccountEventType;
+import com.globanttest.domain.events.AccountEvent;
+import com.globanttest.domain.events.AccountEventType;
 import com.globanttest.money.domain.repositories.AccountEventRepository;
 import com.globanttest.money.interfaces.rest.MoneyTransferCommand;
 
@@ -22,11 +22,17 @@ public class MoneyTransfer {
 	
 	public void processMoneyTransfer(MoneyTransferCommand moneyTransferCommand) {
 		
-		AccountEvent moneyFromAccountTransferEvent = new AccountEvent(moneyTransferCommand.getAmount(),moneyTransferCommand.getFromAccount(),AccountEventType.DEBIT);
+		AccountEvent moneyFromAccountTransferEvent = new AccountEvent(moneyTransferCommand.getAmount().multiply(BigDecimal.valueOf(-1)),moneyTransferCommand.getFromAccount(),AccountEventType.DEBIT);
 		AccountEvent moneyToAccountTransferEvent = new AccountEvent(moneyTransferCommand.getAmount(),moneyTransferCommand.getToAccount(),AccountEventType.CREDIT);
 		
-		accountEventRepository.persist(moneyFromAccountTransferEvent);
-		accountEventRepository.persist(moneyToAccountTransferEvent);
+		try {
+			accountEventRepository.persist(moneyFromAccountTransferEvent);
+			accountEventRepository.persist(moneyToAccountTransferEvent);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		
 	}
 
