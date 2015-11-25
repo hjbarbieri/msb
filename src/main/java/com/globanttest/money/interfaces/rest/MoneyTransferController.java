@@ -22,7 +22,7 @@ public class MoneyTransferController {
 
 	@RequestMapping(value="/transfer",method = RequestMethod.POST)
 	@ResponseBody
-	public ResponseEntity<String> openAccountEvent(@RequestBody MoneyTransferRequest moneyTransferRequest){
+	public ResponseEntity<String> transfer(@RequestBody MoneyTransferRequest moneyTransferRequest){
 		if((moneyTransferRequest.getAmount().compareTo(BigDecimal.ZERO) < 0))
 			return new ResponseEntity<String>(HttpStatus.EXPECTATION_FAILED);
 		
